@@ -6,6 +6,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from .models import User
 import jwt
 import datetime
+from django.conf import settings
 # Create your views here.
 
 
@@ -34,7 +35,7 @@ class loginView(APIView):
             'iat': datetime.datetime.utcnow()
         }
 
-        token = jwt.encode(payload, 'secret', algorithm='HS256')
+        token = jwt.encode(payload, settings.API_SECRET, algorithm='HS256')
         response = Response()
         response.set_cookie(key='jwt', value=token, httponly=True)
         response.data = {"jwt": token}
@@ -49,7 +50,8 @@ class userView(APIView):
             raise AuthenticationFailed("Unauthenticated")
 
         try:
-            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+            payload = jwt.decode(
+                token, settings.API_SECRET, algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed("Unauthenticated")
 
