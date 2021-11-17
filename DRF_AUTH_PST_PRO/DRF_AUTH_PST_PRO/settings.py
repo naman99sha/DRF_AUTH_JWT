@@ -159,3 +159,10 @@ CORS_ORIGIN_CREDENTIALS = True
 
 AUTH_USER_MODEL = 'users.User'
 API_SECRET = str(env('API_SECRET'))
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
